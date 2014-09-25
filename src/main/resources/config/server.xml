@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans
-    xmlns="http://www.springframework.org/schema/beans"
+<beans xmlns="http://www.springframework.org/schema/beans"
 	xmlnssi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:int="http://www.springframework.org/schema/integration"
 	xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
-    xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:xsi="http://www.springframework.org/schema/integration"
 	xmlns:jms="http://www.springframework.org/schema/integration/jms"
 	xsi:schemaLocation="
@@ -17,7 +16,7 @@
        http://www.springframework.org/schema/integration/ip
        http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
 
-    <context:property-placeholder location="classpath:gpb.properties" />
+    <context:property-placeholder location="classpath:props/gpb.properties" />
 
     <!-- Server side -->
 

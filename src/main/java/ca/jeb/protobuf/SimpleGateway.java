@@ -3,7 +3,7 @@
 package ca.jeb.protobuf;
 
 /**
- * @author Erick Bourgeois
+ * @author <a href="mailto:erick@jeb.ca">Erick Bourgeois</a>
  */
 public interface SimpleGateway
 {
