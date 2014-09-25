@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:int="http://www.springframework.org/schema/integration"
+    xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/integration
+        http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/ip
+        http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
+
+    <context:property-placeholder location="classpath:props/gpb.properties" />
+
+    <!-- Server side -->
+    <bean id="serializerDeserializer" class="ca.jeb.protobuf.ProtobufConnectionSerializeDeserializer"/>
+    
+    <int-ip:tcp-connection-factory id="serverConnectionFactory"
+        type="server"
+        port="${protobuf.port}"
+        single-use="true"
+        using-nio="true"
+        so-linger="10000"
+        serializer="serializerDeserializer"
+        deserializer="serializerDeserializer" />
+    
+    <int-ip:tcp-inbound-gateway id="gatewayCrLf"
+        connection-factory="serverConnectionFactory"
+        request-channel="incomingServerChannel"
+        error-channel="errorChannel"/>
+
+    <!-- We leave a message listener off of this channel on purpose because we hook
+    one up before the test actually runs (see the unit test associated with this
+    context file) -->
+    <int:channel id="incomingServerChannel" />
+</beans>

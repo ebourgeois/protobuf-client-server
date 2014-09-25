@@ -1,0 +1,25 @@
+option java_package = "ca.jeb.generated.proto";
+option java_outer_classname = "Messaging";
+
+enum ResponseStatus
+{
+    SUCCESS = 1;
+    FAILURE = 2;
+}
+
+message ResponseStatusHeader
+{
+    required ResponseStatus status = 1;
+    optional string message = 2;
+}
+
+message ProtobufRequest
+{
+    required bytes payload = 1;
+}
+
+message ProtobufResponse
+{
+    required ResponseStatusHeader responseStatusHeader = 1;
+    optional bytes payload = 2;
+}
