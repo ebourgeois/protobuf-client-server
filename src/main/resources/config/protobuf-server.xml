@@ -2,8 +2,8 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:tx="http://www.springframework.org/schema/tx"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:int="http://www.springframework.org/schema/integration"
-    xmlns:int-ip="http://www.springframework.org/schema/integration/ip"
+    xmlns:si="http://www.springframework.org/schema/integration"
+    xmlns:si-ip="http://www.springframework.org/schema/integration/ip"
     xmlns:context="http://www.springframework.org/schema/context"
     xsi:schemaLocation="http://www.springframework.org/schema/tx
         http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
@@ -16,12 +16,15 @@
         http://www.springframework.org/schema/integration/ip
         http://www.springframework.org/schema/integration/ip/spring-integration-ip.xsd">
 
-    <context:property-placeholder location="classpath:props/gpb.properties" />
+    <context:property-placeholder location="classpath:props/protobuf.properties" />
 
-    <!-- Server side -->
+    <!-- <si:transformer id="errorHandler"
+        input-channel="errorChannel"
+        expression="payload.failedMessage.payload + ':' + payload.cause.message"/>
+         -->
     <bean id="serializerDeserializer" class="ca.jeb.protobuf.ProtobufConnectionSerializeDeserializer"/>
     
-    <int-ip:tcp-connection-factory id="serverConnectionFactory"
+    <si-ip:tcp-connection-factory id="TCPConnectionFactory"
         type="server"
         port="${protobuf.port}"
         single-use="true"
@@ -30,13 +33,20 @@
         serializer="serializerDeserializer"
         deserializer="serializerDeserializer" />
     
-    <int-ip:tcp-inbound-gateway id="gatewayCrLf"
-        connection-factory="serverConnectionFactory"
-        request-channel="incomingServerChannel"
-        error-channel="errorChannel"/>
+    <si:channel id="ErrorChannel" />
+    <si:channel id="ProtobufInboundChannel" />
+    <si:channel id="ProtobufOutboundChannel" />
+    
+    <si-ip:tcp-inbound-gateway id="TCPInboundGateway"
+        connection-factory="TCPConnectionFactory"
+        request-channel="ProtobufInboundChannel"
+        reply-channel="ProtobufOutboundChannel"
+        error-channel="ErrorChannel"/>
 
-    <!-- We leave a message listener off of this channel on purpose because we hook
-    one up before the test actually runs (see the unit test associated with this
-    context file) -->
-    <int:channel id="incomingServerChannel" />
+    <bean id="ProtobufRequestHandler" class="ca.jeb.protobuf.ProtobufRequestHandler" />
+    
+    <si:service-activator input-channel="ProtobufInboundChannel"
+        output-channel="ProtobufOutboundChannel"
+        ref="ProtobufRequestHandler"
+        method="handleRequest"/>
 </beans>

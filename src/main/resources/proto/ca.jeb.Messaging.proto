@@ -6,6 +6,13 @@ enum ResponseStatus
     SUCCESS = 1;
     FAILURE = 2;
 }
+enum RequestType
+{
+    GET = 1;
+    PUT = 2;
+    POST = 3;
+    DELETE = 4;
+}
 
 message ResponseStatusHeader
 {
@@ -15,7 +22,8 @@ message ResponseStatusHeader
 
 message ProtobufRequest
 {
-    required bytes payload = 1;
+    required RequestType requestType = 1;
+    optional bytes payload = 2;
 }
 
 message ProtobufResponse
