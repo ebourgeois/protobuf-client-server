@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>ca.jeb</groupId>
   <artifactId>protobuf-client-server</artifactId>
-  <version>2014.09.25</version>
+  <version>2014.09.29</version>
   <name>Protocol Buffer Client and Server Example</name>
   <description>Protocol Buffer client server example by Erick Bourgeois</description>
   <inceptionYear>2014</inceptionYear>
@@ -18,8 +18,8 @@
   </developers>
   <properties>
     <github.global.server>github</github.global.server>
-    <!--<proto.executable.path>C:\Users\boureric\dev\bin\protoc</proto.executable.path>-->
-    <proto.executable.path>C:\Users\erick\dev\bin\protoc</proto.executable.path>
+    <proto.executable.path>C:\Users\boureric\dev\bin\protoc</proto.executable.path>
+    <!-- <proto.executable.path>C:\Users\erick\dev\bin\protoc</proto.executable.path>-->
     <maven.compiler.target>1.7</maven.compiler.target>
     <maven.compiler.source>1.7</maven.compiler.source>
   </properties>

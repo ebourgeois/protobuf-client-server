@@ -10,5 +10,5 @@ import ca.jeb.generated.proto.Messaging.ProtobufResponse;
  */
 public interface ProtobufClientGateway
 {
-  public ProtobufResponse sendAndReceiveMessage(ProtobufRequest protobufResponse);
+  public ProtobufResponse sendAndReceive(ProtobufRequest protobufResponse);
 }

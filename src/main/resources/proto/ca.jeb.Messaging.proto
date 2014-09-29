@@ -13,6 +13,20 @@ enum RequestType
     POST = 3;
     DELETE = 4;
 }
+enum MessageType
+{
+    ADDRESS = 1;
+    PERSON = 2;
+}
+
+// Used as the payload for GET and DELETEs;
+// showing how you can leverage the bytes attribute type
+message MessageRequest
+{
+    required MessageType messageType = 1;
+    optional int64 id = 2;
+    optional bytes message = 3;
+}
 
 message ResponseStatusHeader
 {

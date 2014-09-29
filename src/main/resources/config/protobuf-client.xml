@@ -24,37 +24,33 @@
     <si:logging-channel-adapter id="logger" level="DEBUG" />
     <si:wire-tap channel="logger" />
     
-    <task:executor id="executor" pool-size="5"/>
-    
     <si:channel id="ProtobufRequestChannel" />
-    <si:channel id="ProtobufResponseChannel">
-         <si:dispatcher task-executor="executor"/> 
-    </si:channel>
-    
-    
-		
-    <bean id="ProtobufClient" class="ca.jeb.protobuf.ProtobufClient" />
-    <si:service-activator id="activator"
-        input-channel="ProtobufRequestChannel"
-        ref="ProtobufClient"
-        method="init"/>
-    
-    
-    <bean id="SerializerDeserializer" class="ca.jeb.protobuf.ProtobufConnectionSerializeDeserializer"/>
+    <si:channel id="ProtobufReplyChannel" />
+
+    <bean id="SerializerDeserializer" class="ca.jeb.protobuf.ProtobufClientSerializeDeserializer"/>
     
     <ip:tcp-connection-factory id="TCPClientConnectionFactory"
         type="client"
         host="localhost"
         port="${protobuf.port}"
         single-use="true"
-        so-timeout="10000"
+        using-nio="true"
+        so-timeout="1200000"
         using-direct-buffers="false"
         serializer="SerializerDeserializer"
         deserializer="SerializerDeserializer"/>
-
-	<ip:tcp-inbound-channel-adapter id="tcpInboundAdapter" 
-		channel="ProtobufRequestChannel" 
+        
+    <bean id="ProtobufClient" class="ca.jeb.protobuf.ProtobufClient" depends-on="gw"/>
+    
+    <si:gateway id="gw"
+        service-interface="ca.jeb.protobuf.ProtobufClientGateway"
+        default-request-channel="ProtobufRequestChannel"
+        default-reply-channel="ProtobufReplyChannel"/>
+    
+	<ip:tcp-outbound-gateway id="TCPOutboudChannelGW" 
+		request-channel="ProtobufRequestChannel" 
+		reply-channel="ProtobufReplyChannel"
 		connection-factory="TCPClientConnectionFactory" 
-		client-mode="true"  />
-
+		request-timeout="1200000"
+        reply-timeout="1200000" />
 </beans>

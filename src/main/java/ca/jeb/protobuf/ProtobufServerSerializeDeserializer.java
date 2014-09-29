@@ -17,9 +17,9 @@ import ca.jeb.generated.proto.Messaging.ProtobufResponse;
 /**
  * @author <a href="mailto:boureric@ms.com">boureric</a>
  */
-public class ProtobufConnectionSerializeDeserializer implements Deserializer<ProtobufRequest>, Serializer<ProtobufResponse>
+public class ProtobufServerSerializeDeserializer implements Deserializer<ProtobufRequest>, Serializer<ProtobufResponse>
 {
-  private static final Logger LOGGER = LoggerFactory.getLogger(ProtobufConnectionSerializeDeserializer.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ProtobufServerSerializeDeserializer.class);
 
   /**
    * @see org.springframework.core.serializer.Deserializer#deserialize(java.io.InputStream)
@@ -27,8 +27,9 @@ public class ProtobufConnectionSerializeDeserializer implements Deserializer<Pro
   @Override
   public ProtobufRequest deserialize(InputStream inputStream) throws IOException
   {
+    // Protobuf requires this InputStream to be closed
+    inputStream.close();
     final ProtobufRequest protobufRequest = ProtobufRequest.parseFrom(inputStream);
-    LOGGER.debug("Received protobufRequest: " + protobufRequest);
     return protobufRequest;
   }
 
@@ -38,7 +39,6 @@ public class ProtobufConnectionSerializeDeserializer implements Deserializer<Pro
   @Override
   public void serialize(ProtobufResponse protobufResponse, OutputStream outputStream) throws IOException
   {
-    LOGGER.debug("Sending protobufResponse: " + protobufResponse);
     outputStream.write(protobufResponse.toByteArray());
   }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="true">
-    <property resource="gpb.properties" />
+    <property resource="props/protobuf.properties" />
 
     <contextName>jeb.ca/protobuf-client-server</contextName>
  
@@ -10,7 +10,29 @@
         </encoder>
     </appender>
 
+    <!-- <appender name="LOGFILE" class="ch.qos.logback.core.FileAppender">
+        <File>${log.file}</File>
+        <RolloverOnRestart>true</RolloverOnRestart>
+        
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <Pattern>%d{MMM dd HH:mm:ss.SSS} [%thread] %logger{36}.%M at %L %p: %m%n</Pattern>
+        </encoder>
+        
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${log.file}.%d{yyyy-MM-dd}.%i.gz</FileNamePattern>
+            <maxHistory>${log.maxHistory:5}</maxHistory>
+            <TimeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <MaxFileSize>250MB</MaxFileSize>
+            </TimeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender> -->
+    
+    <logger name="org.springframework.integration">
+        <level value="INFO" /> 
+    </logger>
+    
     <root level="debug">
         <appender-ref ref="STDOUT" />
+        <!-- <appender-ref ref="LOGFILE" /> -->
     </root>
 </configuration>

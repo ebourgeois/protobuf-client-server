@@ -18,24 +18,24 @@
 
     <context:property-placeholder location="classpath:props/protobuf.properties" />
 
-    <!-- <si:transformer id="errorHandler"
-        input-channel="errorChannel"
-        expression="payload.failedMessage.payload + ':' + payload.cause.message"/>
-         -->
-    <bean id="serializerDeserializer" class="ca.jeb.protobuf.ProtobufConnectionSerializeDeserializer"/>
+    <si:channel id="ErrorChannel" />
+    <si:channel id="ProtobufInboundChannel" />
+    <si:channel id="ProtobufOutboundChannel" />
+
+    <si:logging-channel-adapter id="logger" level="DEBUG" />
+    <si:wire-tap channel="logger" />
+        
+    <bean id="SerializerDeserializer" class="ca.jeb.protobuf.ProtobufServerSerializeDeserializer"/>
     
     <si-ip:tcp-connection-factory id="TCPConnectionFactory"
         type="server"
         port="${protobuf.port}"
         single-use="true"
         using-nio="true"
-        so-linger="10000"
-        serializer="serializerDeserializer"
-        deserializer="serializerDeserializer" />
-    
-    <si:channel id="ErrorChannel" />
-    <si:channel id="ProtobufInboundChannel" />
-    <si:channel id="ProtobufOutboundChannel" />
+        so-linger="1200000"
+        using-direct-buffers="false"
+        serializer="SerializerDeserializer"
+        deserializer="SerializerDeserializer" />
     
     <si-ip:tcp-inbound-gateway id="TCPInboundGateway"
         connection-factory="TCPConnectionFactory"
